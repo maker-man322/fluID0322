@@ -27,12 +27,14 @@ settings = get_settings()
 async def lifespan(app: FastAPI):
     logger.info("fluID starting up...")
 
+    # 1. Initialise database
     await init_db()
 
-    if settings.app_env == "development":
-        async with AsyncSessionLocal() as db:
-            await seed_demo_plant(db)
+    # 2. Seed demo plant if none exists (works in any environment)
+    async with AsyncSessionLocal() as db:
+        await seed_demo_plant(db)
 
+    # 3. Start background sensor polling
     start_scheduler()
 
     logger.info(
@@ -43,6 +45,7 @@ async def lifespan(app: FastAPI):
 
     yield
 
+    # Shutdown
     stop_scheduler()
     logger.info("fluID shut down cleanly")
 
@@ -59,7 +62,7 @@ app = FastAPI(
     redoc_url="/redoc",
 )
 
-# CORS — allow the React dashboard to call the API
+# CORS
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -75,7 +78,7 @@ app.add_middleware(
 # Include API routes
 app.include_router(router)
 
-# ROOT ROUTE — Required for Render health check
+# Root route for Render health check
 @app.get("/")
 async def root():
     return {
