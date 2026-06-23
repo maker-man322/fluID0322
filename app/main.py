@@ -55,8 +55,11 @@ app = FastAPI(
     ),
     version="0.1.0",
     lifespan=lifespan,
+    docs_url="/docs",
+    redoc_url="/redoc",
 )
 
+# CORS — allow the React dashboard to call the API
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -69,7 +72,18 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
+# Include API routes
 app.include_router(router)
+
+# ROOT ROUTE — Required for Render health check
+@app.get("/")
+async def root():
+    return {
+        "message": "fluID API is running",
+        "version": "0.1.0",
+        "docs": "/docs",
+        "health": "/health"
+    }
 
 
 @app.get("/health")
