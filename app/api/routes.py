@@ -331,7 +331,6 @@ async def get_trends(
 
     return trends
 
-
 def _compute_status(sensor: SensorConfig, value: float) -> str:
     if value >= sensor.alert_threshold:
         return "ALERT"
