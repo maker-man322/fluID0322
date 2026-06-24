@@ -14,6 +14,8 @@ from app.db.session import init_db, AsyncSessionLocal, seed_demo_plant
 from app.sensors.scheduler import start_scheduler, stop_scheduler
 from app.api.routes import router
 
+from fastapi.middleware.cors import CORSMiddleware
+
 logging.basicConfig(
     level=logging.INFO,
     format="%(asctime)s  %(levelname)-8s  %(name)s — %(message)s",
@@ -66,10 +68,11 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-        "http://localhost:3000",
-        "http://localhost:5173",
-        "http://127.0.0.1:3000",
-    ],
+    "https://flu-id-dashboard-hfti.vercel.app",
+    "http://localhost:3000",
+    "http://localhost:5173",
+    "http://127.0.0.1:3000",
+],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
