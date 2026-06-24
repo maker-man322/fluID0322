@@ -68,7 +68,7 @@ app = FastAPI(
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
-    "https://flu-id-dashboard-hfti.vercel.app",
+    "https://flu-id-dashboard-hfti-mxjpr9sil-flu-id.vercel.app",
     "http://localhost:3000",
     "http://localhost:5173",
     "http://127.0.0.1:3000",
